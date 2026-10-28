@@ -45,11 +45,28 @@ dsh plugin --profile <profile> add <name>@<version> --config.minimum-release-age
 
 ## 安装
 
+从 GitHub（推荐，任何平台）：
+
+```sh
+dsh plugin --profile desktop add git+https://github.com/leoyoul/dsh-onekey-update.git
+```
+
+本机开发时用链接安装：
+
 ```sh
 dsh plugin --profile desktop add link:/Users/leoy/Documents/dsh-onekey-update
 ```
 
 装完**完全退出并重开 DSH**，插件页会出现「一键更新」，右下角按检查结果出现卡片。
+
+## 在 DSH「发现」页里安装
+
+本仓库同时是一个 format-1 插件市场索引，任选一个地址，在 **插件 → 发现 → 添加索引源** 里粘贴：
+
+- `https://leoyoul.github.io/dsh-onekey-update/market/index.json`（更新即时生效）
+- `https://cdn.jsdelivr.net/gh/leoyoul/dsh-onekey-update@main/market/index.json`（CDN 兜底，缓存约 12 小时）
+
+索引里的版本钉在具体 commit 上，安装走 `git+https://github.com/leoyoul/dsh-onekey-update.git#<commit>`。
 
 ## 环境变量
 
