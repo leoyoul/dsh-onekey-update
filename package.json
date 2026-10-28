@@ -1,0 +1,55 @@
+{
+  "name": "dsh-onekey-update",
+  "version": "0.3.0",
+  "description": "DeepSeek Harness 插件：启动时检查已启用插件的新版本，在右下角列出并一键全部升级，完成后提示重启。",
+  "type": "module",
+  "main": "lib/index.js",
+  "icon": "./icon.svg",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "lib",
+    "locale",
+    "cordis.patch.yml",
+    "icon.svg",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "auto-update",
+    "plugin-manager"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "check": "node --check lib/index.js && node --check lib/client.js && node --check lib/check.mjs",
+    "test": "node --test test/"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-layout"
+      ]
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leoyoul/dsh-onekey-update.git"
+  },
+  "homepage": "https://github.com/leoyoul/dsh-onekey-update#readme",
+  "bugs": {
+    "url": "https://github.com/leoyoul/dsh-onekey-update/issues"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "One-key Update (dsh-onekey-update)",
+    "description": "Checks enabled plugins for newer versions at startup, lists them in a corner card, upgrades them all with one click, and asks for a restart afterwards."
+  }
+}
