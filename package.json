@@ -30,7 +30,8 @@
   },
   "scripts": {
     "check": "node --check lib/index.js && node --check lib/client.js && node --check lib/check.mjs",
-    "test": "node --test test/"
+    "test": "node --test test/",
+    "prepublishOnly": "node --check lib/index.js && node --check lib/client.js && node --test test/"
   },
   "dsh": {
     "bundle": {
@@ -51,5 +52,8 @@
   "homepage": "https://github.com/leoyoul/dsh-onekey-update#readme",
   "bugs": {
     "url": "https://github.com/leoyoul/dsh-onekey-update/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
