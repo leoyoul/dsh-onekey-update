@@ -1,6 +1,6 @@
 {
   "name": "dsh-onekey-update",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "DeepSeek Harness 插件：启动时检查已启用插件的新版本，在右下角列出并一键全部升级，完成后提示重启。",
   "type": "module",
   "main": "lib/index.js",
@@ -29,9 +29,9 @@
     "node": ">=20"
   },
   "scripts": {
-    "check": "node --check lib/index.js && node --check lib/client.js && node --check lib/check.mjs",
+    "check": "node --check lib/index.js && node --check lib/client.js && node --check lib/check.mjs && node --check lib/release-notes.mjs && node --check lib/translate-notes.mjs",
     "test": "node --test test/",
-    "prepublishOnly": "node --check lib/index.js && node --check lib/client.js && node --test test/"
+    "prepublishOnly": "npm run check && npm test"
   },
   "dsh": {
     "bundle": {

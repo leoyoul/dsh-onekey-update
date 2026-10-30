@@ -10,6 +10,8 @@ DeepSeek Harness（`dsh`）插件：每次启动后检查**已下载且已启用
 
 - 启动约 8 秒后后台检查，不阻塞界面。
 - 检查完一定给结论：有新版本时列出 `插件  当前版本 → 最新版本`，按钮 **全部更新 / 稍后提醒**；全部最新时也弹卡片，标题 **全部插件都是最新版**，说明检查了多少个、跳过了多少个，按钮 **重新检查 / 知道了**。
+- 在待更新插件下点「查看更新日志」可直接展开并滚动阅读；按需读取 GitHub Releases 最近 100 个发行版中匹配本次升级区间的说明，未找到或访问失败会单独提示。当前不读取 CHANGELOG 文件，发行版未覆盖所有版本时结果可能不完整。
+- 展开日志后可点「翻译为中文」，译文与原文可切换。点击时日志文本会发送给 Bing，代码、链接和版本号会先保护；无需另开其他插件。网络失败时保留原文并在标题旁提示重试。
 - 点「全部更新」：显示 `3/7  dsh-context  0.75.1 → 0.77.0` 的实时进度，逐条执行。
 - 结束：标题给出 `成功 N、失败 M`，每行标 ✓ / ✗，失败行给出 pnpm 输出的关键一行；提示重启 DSH 生效。
 - 部分失败不影响其余插件继续升级。
@@ -61,12 +63,7 @@ dsh plugin --profile desktop add link:/Users/leoy/Documents/dsh-onekey-update
 
 ## 在 DSH「发现」页里安装
 
-本仓库同时是一个 format-1 插件市场索引，任选一个地址，在 **插件 → 发现 → 添加索引源** 里粘贴：
-
-- `https://leoyoul.github.io/dsh-onekey-update/market/index.json`（更新即时生效）
-- `https://cdn.jsdelivr.net/gh/leoyoul/dsh-onekey-update@main/market/index.json`（CDN 兜底，缓存约 12 小时）
-
-索引里的版本钉在具体 commit 上，安装走 `git+https://github.com/leoyoul/dsh-onekey-update.git#<commit>`。
+插件已发布到 npm，主流市场自动收录（约 24 小时同步一次）：直接在 **插件 → 发现** 里搜 `dsh-onekey-update` 安装即可。
 
 ## 环境变量
 
