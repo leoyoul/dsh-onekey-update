@@ -49,7 +49,7 @@ test('fetchLatest 在一个 registry 失败后改用下一个', async () => {
   assert.equal(calls.length, 3, '坏源重试一次后切源');
 });
 
-test('scanProfile 跳过非 registry、未启用与自身，保留可升级候选', async () => {
+test('scanProfile 包含未启用与市场停用插件，仍跳过自身、非 registry 和缺失安装', async () => {
   const fs = await import('node:fs');
   const os = await import('node:os');
   const path = await import('node:path');
@@ -63,21 +63,25 @@ test('scanProfile 跳过非 registry、未启用与自身，保留可升级候�
           'dsh-good': '1.0.0',
           'dsh-local': 'link:/tmp/local',
           'dsh-off': '1.0.0',
+          'dsh-market-off': '1.0.0',
+          'dsh-missing': '1.0.0',
         },
-        dsh: { profile: { bundles: ['dsh-onekey-update', 'dsh-good', 'dsh-local'] } },
+        dsh: { profile: { bundles: ['dsh-onekey-update', 'dsh-good', 'dsh-local', 'dsh-market-off'] } },
       }),
     );
     fs.writeFileSync(path.join(dir, 'cordis.patch.yml'), '- id: dsh-good\n');
-    for (const [name, version] of [['dsh-good', '1.0.0'], ['dsh-local', '0.0.1']]) {
+    fs.mkdirSync(path.join(dir, '.dsh-market'));
+    fs.writeFileSync(path.join(dir, '.dsh-market', 'state.json'), JSON.stringify({ disabled: ['dsh-market-off', 'dsh-off'] }));
+    for (const [name, version] of [['dsh-good', '1.0.0'], ['dsh-local', '0.0.1'], ['dsh-off', '1.0.0'], ['dsh-market-off', '1.0.0']]) {
       fs.mkdirSync(path.join(dir, 'node_modules', name), { recursive: true });
       fs.writeFileSync(path.join(dir, 'node_modules', name, 'package.json'), JSON.stringify({ version }));
     }
     const { candidates, skipped } = scanProfile(dir);
-    assert.deepEqual(candidates.map((item) => item.name), ['dsh-good']);
+    assert.deepEqual(candidates.map((item) => item.name), ['dsh-good', 'dsh-off', 'dsh-market-off']);
     const reasons = Object.fromEntries(skipped.map((item) => [item.name, item.reason]));
     assert.match(reasons['dsh-onekey-update'], /自身/);
     assert.match(reasons['dsh-local'], /非 registry/);
-    assert.match(reasons['dsh-off'], /未启用/);
+    assert.match(reasons['dsh-missing'], /未在 node_modules 中找到/);
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }
@@ -93,7 +97,7 @@ test('checkAll 汇总可更新项与查询失败项', async () => {
       path.join(dir, 'package.json'),
       JSON.stringify({
         dependencies: { 'dsh-newer': '1.0.0', 'dsh-same': '2.0.0', 'dsh-boom': '1.0.0' },
-        dsh: { profile: { bundles: ['dsh-newer', 'dsh-same', 'dsh-boom'] } },
+        // 没有启用清单和 patch 的已安装依赖也必须参与检查。
       }),
     );
     for (const [name, version] of [['dsh-newer', '1.0.0'], ['dsh-same', '2.0.0'], ['dsh-boom', '1.0.0']]) {

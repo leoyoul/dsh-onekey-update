@@ -30,4 +30,8 @@ test('点击插件的更新日志后在卡片内显示内容，并可收起', as
   assert.ok(close);
   await close.props.onClick();
   assert.doesNotMatch(text(render()), /修复崩溃/);
+  values[0] = { phase: 'uptodate', checkedCount: 4, skippedCount: 3, updates: [] };
+  assert.match(text(render()), /已检查 4 个插件/);
+  assert.match(text(render()), /3 个因插件自身、非 registry 依赖或缺失安装而跳过/);
+  assert.doesNotMatch(text(render()), /未启用/);
 });

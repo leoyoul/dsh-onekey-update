@@ -1,6 +1,6 @@
 # dsh-onekey-update 一键更新
 
-DeepSeek Harness（`dsh`）插件：每次启动后检查**已下载且已启用**的插件有没有新版本，在界面右下角列出来，点一次「全部更新」就逐个升级到最新版，完成后提示重启。
+DeepSeek Harness（`dsh`）插件：每次启动后检查**已安装的全部插件（包括停用的插件）**有没有新版本，在界面右下角列出来，点一次「全部更新」就逐个升级到最新版，完成后提示重启。
 
 界面是原生风格通知条：左侧 3px 状态竖条 + 徽标，配色全部取自 DSH 主题 token（`--dsw-alias-*`、`--dsw-radius-*`、`--dsw-shadow-*`），随主题明暗与品牌色变化，不写死颜色。四态（有更新 / 全最新 / 更新中 / 失败）共用一套结构，更新中用分段进度条，失败行标 ✗ 并给出 pnpm 关键错误。
 
@@ -18,11 +18,12 @@ DeepSeek Harness（`dsh`）插件：每次启动后检查**已下载且已启用
 
 ## 检查范围
 
-profile `package.json` 的 `dependencies` ∩ 已启用（`dsh.profile.bundles` 或 `cordis.patch.yml`），并排除：
+检查 profile `package.json` 的 `dependencies` 中已安装的包，**不按启停状态过滤**。未加入启用清单或已在插件页停用的插件也会检查，并参与「全部更新」。更新只升级依赖，不改动启用清单、Cordis patch 或市场停用状态；停用的插件更新后仍保持停用。
+
+仍排除：
 
 - 插件自身；
 - 非 registry 依赖（`file:` / `link:` / `git:` / 本地路径）；
-- 已在插件页停用的包（`.dsh-market/state.json`）；
 - `node_modules` 里找不到、无法确定当前版本的包。
 
 版本比较使用完整 semver（含预发布段），只列前向升级，不会降级。查询 `dist-tags.latest`，先问 `https://registry.npmjs.org`，失败再问 `https://registry.npmmirror.com`。

@@ -1,7 +1,7 @@
 {
   "name": "dsh-onekey-update",
-  "version": "0.4.0",
-  "description": "DeepSeek Harness 插件：启动时检查已启用插件的新版本，在右下角列出并一键全部升级，完成后提示重启。",
+  "version": "0.4.1",
+  "description": "DeepSeek Harness 插件：启动时检查已安装插件（含停用）的新版本，在右下角列出并一键全部升级，完成后提示重启。",
   "type": "module",
   "main": "lib/index.js",
   "icon": "./icon.svg",
@@ -16,6 +16,7 @@
     "cordis.patch.yml",
     "icon.svg",
     "README.md",
+    "CHANGELOG.md",
     "LICENSE"
   ],
   "keywords": [
@@ -30,7 +31,7 @@
   },
   "scripts": {
     "check": "node --check lib/index.js && node --check lib/client.js && node --check lib/check.mjs && node --check lib/release-notes.mjs && node --check lib/translate-notes.mjs",
-    "test": "node --test test/",
+    "test": "node --test",
     "prepublishOnly": "npm run check && npm test"
   },
   "dsh": {
